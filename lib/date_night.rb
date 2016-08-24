@@ -127,11 +127,23 @@ class BinarySearchTree
     return {node.title => node.score} #once we find the farthest left (min), return the movie name and score as a hash
   end
 
-  def sort
-    #do last
+  def load(file)
+    movies = File.readlines(file)
+    @num_added = 0
+    movies.each do |movie|
+      movie_array = movie.split(",")
+      if include?(movie_array[0].to_i)
+      else
+        insert(movie_array[0].to_i, movie_array[1])
+        @num_added += 1
+      end
+
+    end
+  return @num_added
+    #return total # of movies inserted with .load
   end
 
-  def load
+  def sort
     #do last
   end
 
@@ -149,12 +161,12 @@ tree.insert(92, "Sharknado 3")
 tree.insert(50, "Hannibal Buress: Animal Furnace")
 
 # puts tree.depth_of(92)
-
+puts tree.load("lib/movies.txt")
 #
 # puts tree.max
 # puts tree.min
 #
-# puts tree.include?(16)
+puts tree.include?(38)
 # puts tree.include?(72)
 # puts tree.include?(61)
 # puts tree.include?(54)

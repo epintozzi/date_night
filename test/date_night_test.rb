@@ -12,7 +12,7 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal 1, tree.insert(16, "Johnny English")
     assert_equal 2, tree.insert(50, "Hannibal Buress: Animal Furnace")
   end
-  
+
   def test_find_if_score_is_included
     tree = BinarySearchTree.new
 
@@ -95,5 +95,21 @@ class BinarySearchTreeTest < Minitest::Test
 
     assert_equal nil, tree.min
   end
+
+  def test_it_inserts_movies_upon_load
+    tree = BinarySearchTree.new
+
+    assert_equal 99, tree.load("lib/movies.txt")
+    assert_equal true, tree.include?(55)
+  end
+
+  def test_it_does_not_insert_duplicates
+    tree = BinarySearchTree.new
+
+    tree.insert(17, "Meet My Valentine")
+
+    assert_equal 98, tree.load("lib/movies.txt")
+  end
+
 
 end
