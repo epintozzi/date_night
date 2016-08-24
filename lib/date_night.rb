@@ -11,14 +11,17 @@ class BinarySearchTree
 
   def insert(score, title)
     new_node = Node.new(score, title)
+    @depth = 0
     if self.root.nil? #if there is no root, this node will become root
       self.root = new_node
     else
       self.compare_place(self.root, new_node) #if there is already a root, we call the compare_place method to see if the new node should go to the left or right
     end
+    return @depth
   end
 
   def compare_place(node1, node2)
+    @depth += 1 #increment the node's depth every time compare_place is called on that node
     if node2.score < node1.score #checks if node 2 is less than node 1
       if node1.left.nil? #if node 1 had nothing assigned to the left, node 2 will take that place
         node1.left = node2
@@ -32,43 +35,80 @@ class BinarySearchTree
         compare_place(node1.right, node2) #if node 1 already has something to the right, we compare node 2 to the existing right node
       end
     end
-    # return depth
+    return @depth
   end
 
   def include?(score)
+    if self.root == nil #if the tree is empty, return nil
+      return false
+    end
     node = self.root
-    if node.score == score
+    if node.score == score #checks if the node's score is equal to the given score, returns true
       return true
     else
-      next_include?(node, score)
+      next_include?(node, score) #if the node's score is not equal to the given score, run the next_include method to compare against next node
     end
   end
 
   def next_include?(node, score)
-    if node.score < score
-      if node.right.nil?
+    if node.score < score #checks if the node's score is less than the given score
+      if node.right.nil? #if node's score is less than given score, check if it has a right node assigned
         return false
       else
         node = node.right
-        next_include?(node, score)
+        next_include?(node, score) #calls next_include method again until we run out of right nodes
       end
-    elsif node.score > score
-      if node.left.nil?
+    elsif node.score > score #checks if the node's score is greater than the given score
+      if node.left.nil? #if node's score is greater than given score, check if it has a left node assigned
         return false
       else
         node = node.left
-        next_include?(node, score)
+        next_include?(node, score) #calls next_include method again until we run out of left nodes
       end
     elsif node.score == score
       return true
     end
   end
 
-  def depth_of
-    #do 3rd
+  def depth_of(score)
+    if self.root == nil
+      return nil
+    end
+    node = self.root
+    @depth = 0
+    if node.score != score
+      depth_count(node,score)
+    end
+    return @depth
+  end
+
+  def depth_count(node, score)
+
+    if node.score < score
+      if node.right.nil?
+        @depth = nil
+      else
+        node = node.right
+        @depth += 1
+        depth_count(node, score)
+      end
+    elsif node.score > score
+      if node.left.nil?
+        @depth = nil
+      else
+        node = node.left
+        @depth += 1
+        depth_count(node, score)
+      end
+    elsif node.score == score
+      return @depth
+    end
   end
 
   def max
+    if self.root == nil
+      return nil
+    end
     node = self.root
     until node.right.nil? #starting with root, find the farthest right value which will be the maximum score
       node = node.right
@@ -77,6 +117,9 @@ class BinarySearchTree
   end
 
   def min
+    if self.root == nil
+      return nil
+    end
     node = self.root
     until node.left.nil? #starting with root, find the farthest left value which will be the minimum score
       node = node.left
@@ -105,10 +148,13 @@ tree.insert(16, "Johnny English")
 tree.insert(92, "Sharknado 3")
 tree.insert(50, "Hannibal Buress: Animal Furnace")
 
-puts tree.max
-puts tree.min
+# puts tree.depth_of(92)
 
-puts tree.include?(16)
-puts tree.include?(72)
-puts tree.include?(61)
-puts tree.include?(54)
+#
+# puts tree.max
+# puts tree.min
+#
+# puts tree.include?(16)
+# puts tree.include?(72)
+# puts tree.include?(61)
+# puts tree.include?(54)
