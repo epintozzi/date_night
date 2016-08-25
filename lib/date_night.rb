@@ -153,25 +153,25 @@ class BinarySearchTree
 
   def health(depth)
     if self.root == nil
-      return nil
+      return []
     end
 
-    if depth == 0
-      nodes = [self.root]
-      health = []
+    nodes = [self.root]
+
+    depth.times do
+      children = []
       nodes.each do |node|
-        health << [node.score, 1 + num_children(node), percentage(node)]
+        children << node.left
+        children << node.right
       end
+      nodes = children.compact
     end
 
-    if depth == 1
-      node = self.root
-      nodes = [node.left, node.right]
-      health = []
-      nodes.each do |node|
-        health <<[node.score, 1 + num_children(node), percentage(node)]
-      end
+    health = []
+    nodes.each do |node|
+      health <<[node.score, 1 + num_children(node), percentage(node)]
     end
+
     health
   end
 
@@ -209,12 +209,12 @@ tree.insert(50, "Hannibal Buress: Animal Furnace")
 
 require 'json'
 
-puts tree.sort.to_json
-
-puts tree.health(1).to_json
+# puts tree.sort.to_json
+tree.load("lib/movies.txt")
+puts tree.health(12).to_json
 
 # puts tree.depth_of(92)
-# puts tree.load("lib/movies.txt")
+
 # #
 # # puts tree.max
 # # puts tree.min

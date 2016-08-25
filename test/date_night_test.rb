@@ -125,7 +125,9 @@ class BinarySearchTreeTest < Minitest::Test
   def test_it_returns_health
     tree = BinarySearchTree.new
 
+    assert_equal [], tree.health(0)
     tree.insert(61, "Bill & Ted's Excellent Adventure")
+    assert_equal [], tree.health(1)
     tree.insert(16, "Johnny English")
     tree.insert(92, "Sharknado 3")
     tree.insert(50, "Hannibal Buress: Animal Furnace")
