@@ -137,18 +137,65 @@ class BinarySearchTree
         insert(movie_array[0].to_i, movie_array[1])
         @num_added += 1
       end
-
     end
-  return @num_added
-    #return total # of movies inserted with .load
+    return @num_added
   end
 
   def sort
-    #do last
+    sorted = []
+
+    sorted.insert(0, min)
+    sorted.insert(1, max)
+
+    sorted
   end
 
-  def health
-    #do last
+
+  def health(depth)
+    if self.root == nil
+      return nil
+    end
+
+    if depth == 0
+      nodes = [self.root]
+      health = []
+      nodes.each do |node|
+        health << [node.score, 1 + num_children(node), percentage(node)]
+      end
+    end
+
+    if depth == 1
+      node = self.root
+      nodes = [node.left, node.right]
+      health = []
+      nodes.each do |node|
+        health <<[node.score, 1 + num_children(node), percentage(node)]
+      end
+    end
+    health
+  end
+
+  def num_children(node = self.root)
+    if node.left == nil and node.right == nil
+      return 0
+    end
+    if node.left != nil and node.right == nil
+      return 1 + num_children(node.left)
+    end
+    if node.left == nil and node.right != nil
+      return 1 + num_children(node.right)
+    end
+    if node.left != nil and node.right != nil
+      return 2 + num_children(node.left) + num_children(node.right)
+    end
+  end
+
+  def num_nodes
+    num_children + 1
+  end
+
+  def percentage(node)
+    percentage = (((1.0 + num_children(node))/num_nodes)*100.0).to_i
   end
 
 end
@@ -160,13 +207,19 @@ tree.insert(16, "Johnny English")
 tree.insert(92, "Sharknado 3")
 tree.insert(50, "Hannibal Buress: Animal Furnace")
 
+require 'json'
+
+puts tree.sort.to_json
+
+puts tree.health(1).to_json
+
 # puts tree.depth_of(92)
-puts tree.load("lib/movies.txt")
-#
-# puts tree.max
-# puts tree.min
-#
-puts tree.include?(38)
+# puts tree.load("lib/movies.txt")
+# #
+# # puts tree.max
+# # puts tree.min
+# #
+# puts tree.include?(38)
 # puts tree.include?(72)
 # puts tree.include?(61)
 # puts tree.include?(54)

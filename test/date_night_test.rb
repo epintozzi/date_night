@@ -103,12 +103,35 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal true, tree.include?(55)
   end
 
-  def test_it_does_not_insert_duplicates
+  def test_it_does_not_insert_duplicates_from_file
     tree = BinarySearchTree.new
 
     tree.insert(17, "Meet My Valentine")
 
     assert_equal 98, tree.load("lib/movies.txt")
+  end
+
+  def test_it_sorts_by_score
+    tree = BinarySearchTree.new
+
+    tree.insert(61, "Bill & Ted's Excellent Adventure")
+    tree.insert(16, "Johnny English")
+    tree.insert(92, "Sharknado 3")
+
+    assert_equal [{"Johnny English" => 16}, {"Bill & Ted's Excellent Adventure" => 61}, {"Sharknado 3" => 92}], tree.sort
+
+  end
+
+  def test_it_returns_health
+    tree = BinarySearchTree.new
+
+    tree.insert(61, "Bill & Ted's Excellent Adventure")
+    tree.insert(16, "Johnny English")
+    tree.insert(92, "Sharknado 3")
+    tree.insert(50, "Hannibal Buress: Animal Furnace")
+
+    assert_equal [[61, 4, 100]], tree.health(0)
+    assert_equal [[16, 2, 50], [92, 1, 25]], tree.health(1)
   end
 
 
