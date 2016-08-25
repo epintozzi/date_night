@@ -141,15 +141,6 @@ class BinarySearchTree
     return @num_added
   end
 
-  def sort
-    sorted = []
-
-    sorted.insert(0, min)
-    sorted.insert(1, max)
-
-    sorted
-  end
-
 
   def health(depth)
     if self.root == nil
@@ -198,6 +189,19 @@ class BinarySearchTree
     percentage = (((1.0 + num_children(node))/num_nodes)*100.0).to_i
   end
 
+  def sort
+    if self.root == nil
+      return []
+    end
+
+    sorted = []
+
+    node = self.root
+    sorted << {node.title => node.score}
+
+    sorted
+  end
+
 end
 
 tree = BinarySearchTree.new
@@ -207,19 +211,17 @@ tree.insert(16, "Johnny English")
 tree.insert(92, "Sharknado 3")
 tree.insert(50, "Hannibal Buress: Animal Furnace")
 
+puts tree.depth_of(92)
+
+puts tree.max
+puts tree.min
+
+puts tree.include?(50)
+puts tree.include?(72)
+tree.load("lib/movies.txt")
+
 require 'json'
 
-# puts tree.sort.to_json
-tree.load("lib/movies.txt")
 puts tree.health(12).to_json
 
-# puts tree.depth_of(92)
-
-# #
-# # puts tree.max
-# # puts tree.min
-# #
-# puts tree.include?(38)
-# puts tree.include?(72)
-# puts tree.include?(61)
-# puts tree.include?(54)
+puts tree.sort.to_json
